@@ -98,7 +98,9 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-red-100/10 mt-12 pt-8 text-center text-red-100/60">
-          <p>&copy; {new Date().getFullYear()} Kokonut. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Made by Shruti👋. Some rights reserved. Fork it, tweak it, break it—just don’t blame me.
+
+😂.</p>
         </div>
       </div>
     </footer>
