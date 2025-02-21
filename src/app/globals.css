@@ -53,3 +53,24 @@
   }
 }
 
+@layer components {
+  .input-field {
+    @apply w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:border-indigo-300 focus:ring-1 focus:ring-indigo-300 transition-all outline-none placeholder:text-white/30;
+  }
+
+  .form-label {
+    @apply text-white/90 block mb-2 font-medium;
+  }
+
+  .form-container {
+    @apply bg-black/40 backdrop-blur-lg rounded-2xl p-8 border border-white/10;
+  }
+
+  .submit-btn {
+    @apply px-8 py-3 rounded-lg bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 text-black font-semibold hover:opacity-90 transition-opacity focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-black/40;
+  }
+
+  .header-title {
+    @apply text-2xl md:text-4xl lg:text-5xl font-extrabold flex items-center gap-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300;
+  }
+}

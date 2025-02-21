@@ -2,27 +2,31 @@
 
 import Link from "next/link"
 import { Mail, MapPin, Phone } from "lucide-react"
+import Image from "next/image"
 
 export default function Footer() {
   return (
-    <footer className="relative z-10 border-t border-red-100/10 bg-black/50 backdrop-blur-lg mt-20">
+    <footer className="max-w-7xl relative z-10 border-t border-red-100/10 bg-black/50 backdrop-blur-lg mt-20">
       <div className="container mx-auto px-4 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           <div>
-            <h3 className="text-xl font-bold text-red-300 mb-4">Kokonut</h3>
-            <p className="text-red-100/70 mb-4">
-              Crafting exceptional digital experiences through innovative design and cutting-edge technology.
+            <section className=" flex items-center gap-2   ">
+              <Image src="/favicon_io/android-chrome-192x192.png" alt="JobBoard Logo"  width={40} height={50} />
+              <h3 className="text-xl font-bold text-red-300 ">Job Board</h3>
+            </section>
+            <p className="text-red-100/70 mt-4">
+            Creating world-class job platforms with innovative design.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-red-100/70 hover:text-red-100 transition-colors">
+            <div className="flex space-x-4 mt-10">
+              <Link href="#" className="px-6 py-3 rounded-full bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 text-black font-semibold hover:opacity-90 transition-opacity">
                 Twitter
-              </a>
-              <a href="#" className="text-red-100/70 hover:text-red-100 transition-colors">
+              </Link>
+              <Link href="#" className="px-6 py-3 rounded-full bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 text-black font-semibold hover:opacity-90 transition-opacity">
                 LinkedIn
-              </a>
-              <a href="#" className="text-red-100/70 hover:text-red-100 transition-colors">
+              </Link>
+              <Link href="#" className="px-6 py-3 rounded-full bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 text-black font-semibold hover:opacity-90 transition-opacity">
                 GitHub
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -61,14 +65,14 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="text-red-100/70 hover:text-red-100 transition-colors">
+                <Link href="#" className="text-red-100/70 hover:text-red-100 transition-colors">
                   Documentation
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-red-100/70 hover:text-red-100 transition-colors">
+                <Link href="#" className="text-red-100/70 hover:text-red-100 transition-colors">
                   Support
-                </a>
+                </Link>
               </li>
               <li>
                 <Link href="/contact" className="text-red-100/70 hover:text-red-100 transition-colors">

@@ -1,0 +1,50 @@
+ {/* <motion.form 
+        variants={fadeInUp}
+        className="form-container"
+        onSubmit={(e) => e.preventDefault()}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <label className="block">
+              <span className="form-label">Company Name</span>
+              <input type="text" className="input-field" placeholder="Enter company name" />
+            </label>
+
+            <label className="block">
+              <span className="form-label">Job Title</span>
+              <input type="text" className="input-field" placeholder="e.g. Senior Frontend Developer" />
+            </label>
+          </div>
+
+          <div className="space-y-4">
+            <label className="block">
+              <span className="form-label">Location</span>
+              <input type="text" className="input-field" placeholder="e.g. Remote, New York, London" />
+            </label>
+
+            <label className="block">
+              <span className="form-label">Employment Type</span>
+              <select className="input-field">
+                <option value="" className="bg-black">Select type</option>
+                <option value="full-time" className="bg-black">Full-time</option>
+                <option value="part-time" className="bg-black">Part-time</option>
+                <option value="contract" className="bg-black">Contract</option>
+                <option value="internship" className="bg-black">Internship</option>
+              </select>
+            </label>
+          </div>
+
+          <div className="md:col-span-2 space-y-4">
+            <label className="block">
+              <span className="form-label">Job Description</span>
+              <textarea className="input-field h-40" placeholder="Describe the role, requirements, and benefits..." />
+            </label>
+          </div>
+
+          <div className="md:col-span-2 flex justify-end">
+            <button type="submit" className="submit-btn">
+              Post Job
+            </button>
+          </div>
+        </div>
+      </motion.form> */}

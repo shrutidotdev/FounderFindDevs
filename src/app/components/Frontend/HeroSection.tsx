@@ -5,6 +5,8 @@ import Image from "next/image";
 import { motion } from "motion/react"; // Changed from "motion/react" to "framer-motion"
 import { cn } from "@/lib/utils";
 import Avatar from "./Avatar";
+import Link from "next/link";
+import Stats from "./Stats";
 
 const pacifico = Pacifico({
   subsets: ["latin"],
@@ -97,12 +99,23 @@ export default function Home() {
             animate="visible"
             className="flex gap-4 justify-center"
           >
-            <button className="px-6 py-3 rounded-lg bg-white text-black font-medium hover:bg-white/90 transition-colors">
-              Get Started
-            </button>
+            <Link href={"/hire"}>
+              <button className="px-6 py-3 rounded-lg bg-white text-black font-medium hover:bg-white/90 transition-colors">
+                Get Started
+              </button>
+            </Link>
             <button className="px-6 py-3 rounded-lg bg-white/10 text-white font-medium hover:bg-white/20 transition-colors">
               Learn More
             </button>
+          </motion.div>
+
+          <motion.div
+            custom={4}
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <Stats />
           </motion.div>
         </div>
       </div>
