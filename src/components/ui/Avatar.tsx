@@ -25,16 +25,21 @@ const AvatarCircle = ({ avatar, index }: AvatarCircleProps) => {
         delay: index * 0.1,
         ease: "easeOut",
       }}
-      whileHover={{ scale: 1.6 }}
+      whileHover={{
+        scale: 1.6,
+        transition: { type: "spring", stiffness: 200, damping: 10 }
+      }}
       className="relative h-10 w-10 md:h-[3rem] md:w-[3rem] md:rounded-full rounded-full overflow-hidden border-2 border-white/20 bg-white/5 backdrop-blur-sm"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-rose-500/10" />
       <Image
-        className="relative object-contain"
+        className="relative object-cover z-0"
         src={avatar.imageUrl}
         alt={`Avatar ${index + 1}`}
-        width={60}
-        height={60}
+        width={96}  // Increased for better scaling quality
+        height={96}
+        quality={100} // Force maximum quality
+        priority={index < 3} // Load first 3 images with priority
       />
       <div className="absolute inset-0 rounded-full ring-1 ring-white/20" />
     </motion.a>
@@ -47,24 +52,38 @@ interface AvatarCountProps {
 
 const AvatarCount = ({ numPeople }: AvatarCountProps) => {
   return (
-    <motion.a
-      href="#"
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{
-        duration: 0.2,
-        delay: numPeople * 0.1,
-        ease: "easeOut",
-      }}
-      whileHover={{ scale: 1.1 }}
-      className="relative flex h-10 w-10 items-center justify-center rounded-full border-2 border-white/20 bg-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors"
-    >
-      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500/10 to-rose-500/10" />
-      <span className="relative z-10 text-xs font-medium text-white">
-        +{numPeople}
-      </span>
-      <div className="absolute inset-0 rounded-full ring-1 ring-white/20" />
-    </motion.a>
+<motion.div
+  initial={{ opacity: 0, scale: 0.5 }}
+  animate={{ opacity: 1, scale: 1 }}
+  transition={{
+    duration: 0.3,
+    delay: 0,
+    ease: [0.215, 0.61, 0.355, 1],
+  }}
+  whileHover={{ 
+    scale: 1.1,
+    rotate: 5,
+    background: 'rgba(255, 255, 255, 0.1)',
+    transition: { 
+      duration: 0.4,
+      ease: [0.165, 0.84, 0.44, 1],
+    }
+  }}
+  whileTap={{ scale: 0.95 }}
+  className="relative flex h-8 w-8 md:h-10 md:w-10 items-center justify-center rounded-full border-2 border-white/20 bg-white/5 backdrop-blur-sm"
+>
+  <motion.div 
+    className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500/20 to-rose-500/20"
+    whileHover={{ opacity: 0.4 }}
+  />
+  <span className="relative z-10 text-xs font-medium text-white">
+    +{numPeople}
+  </span>
+  <motion.div 
+    className="absolute inset-0 rounded-full ring-1 ring-white/20"
+    whileHover={{ boxShadow: '0 0 0 1px rgba(255,255,255,0.4)', }}
+  />
+</motion.div>
   );
 };
 

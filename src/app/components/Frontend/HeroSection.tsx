@@ -4,7 +4,7 @@ import { Pacifico } from "next/font/google";
 import Image from "next/image";
 import { motion } from "motion/react"; // Changed from "motion/react" to "framer-motion"
 import { cn } from "@/lib/utils";
-import { AvatarCircles } from "@/components/ui/Avatar";
+import Avatar from "./Avatar";
 
 const pacifico = Pacifico({
   subsets: ["latin"],
@@ -37,30 +37,7 @@ export default function Home() {
             animate="visible"
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#[#d53bfa] ] "
           >
-            <AvatarCircles
-              avatarUrls={[
-                {
-                  imageUrl: "/avatar/pic1.avif",
-                  profileUrl: "https://github.com/shrutisinghz",
-                },
-                {
-                  imageUrl: "/avatar/pic2.avif",
-                  profileUrl: "https://github.com/shrutisinghz",
-                },
-                {
-                  imageUrl: "/avatar/pic3.avif",
-                  profileUrl: "https://github.com/shrutisinghz",
-                },
-                {
-                  imageUrl: "/avatar/pic4.avif",
-                  profileUrl: "https://github.com/shrutisinghz",
-                },
-                {
-                  imageUrl: "/avatar/pic5.avif",
-                  profileUrl: "https://github.com/shrutisinghz",
-                },
-              ]}
-            />
+            <Avatar />
             <motion.div
               custom={0}
               variants={fadeUpVariants}
@@ -68,7 +45,12 @@ export default function Home() {
               animate="visible"
               className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#d53bfa]"
             >
-              <Image src="/icon.svg" alt="shrutisinghz.dev" width={30} height={30} />
+              <Image
+                src="/icon.svg"
+                alt="shrutisinghz.dev"
+                width={30}
+                height={30}
+              />
               <span className="text-sm text-white font-mono font-extrabold tracking-wide">
                 shrutisinghz.dev
               </span>
