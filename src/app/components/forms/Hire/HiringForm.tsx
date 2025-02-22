@@ -2,15 +2,15 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import UserSelectionForm from "./UserSelectionType";
+import UserSelectionTypeForm from "./UserSelectionType"
 import { Card, CardContent } from "@/components/ui/card";
 import CompanyForm from "./CompanyForm";
 
-type UserSelectionType = "company" | "jobseeker" | null;
+type UserSelectionType = "company" | "jobseeker" | undefined;
 
 const HiringForm = () => {
   const [step, setStep] = useState(1);
-  const [userType, setUserType] = useState<UserSelectionType>(null);
+  const [userType, setUserType] = useState<UserSelectionType>(undefined);
 // this function will handle the user type selection and move to the next step the hiring page for company or jobseeker to fill the form
   function handleUserTypeSelection(type: UserSelectionType) {
     setUserType(type);
@@ -19,18 +19,12 @@ const HiringForm = () => {
 
   function renderStep() {
     switch (step) {
-        case 1: return <UserSelectionForm onSelect={handleUserTypeSelection} />
+      case 1: return <UserSelectionTypeForm onSelect={handleUserTypeSelection} />
+
         case 2: return userType === "company" ? <CompanyForm /> : <h1>Jobseeker Form</h1>
         default: return null
     }
   }
-  
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 },
-  };
-
 
 
   return (

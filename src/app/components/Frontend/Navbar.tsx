@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 async function Navbar() {
   const session = await auth();
-  console.log(session);
+  // console.log(session);
 
   return (
     <div className="flex w-full bg-black fixed z-50 top-0 left-0 right-0">
@@ -38,13 +38,18 @@ async function Navbar() {
                   await signOut({ redirectTo: "/" });
                 }}
               >
-                <Button>Logout</Button>
+                <Link
+                  href="/"
+                  className="text-white font-semibold hover:text-gray-200  transition-colors"
+                >
+                  <Button className="bg-white text-black hover:text-white hover:bg-red-400 ">Logout</Button>
+                </Link>
               </form>
             ) : (
               <>
                 <Link
                   href="/login"
-                  className="text-white font-semibold hover:text-gray-200  transition-colors"
+                  className="text-white font-semibold "
                 >
                   <Button>Login</Button>
                 </Link>
@@ -55,7 +60,7 @@ async function Navbar() {
                   <Button>Sign Up</Button>
                 </Link>
               </>
-            )}
+            )}  
           </div>
         </div>
       </div>

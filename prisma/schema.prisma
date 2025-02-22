@@ -13,56 +13,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
- 
+enum UserType {
+  COMPANY
+  JOBSEEKER
+}
+
 model User {
-  id            String          @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
-// 1:1 relationship
-  Company Company?
+  accounts      Account[]
+  sessions      Session[]
 
-  JobSeeker JobSeeker?
+  userType      UserType?
+  Company       Company?
+
+  JobSeeker     JobSeeker?
 
   OnBoarding Boolean @default(false)
-  
-  accounts      Account[]
-  sessions      Session[] 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }
+
 model Company {
-  id           String        @id @default(uuid())
-  name         String
-  location  String
-  about        String
-  website      String
-  xAccount String?
+  id               String  @id @default(uuid())
+  name             String
+  location         String
+  about            String
+  website          String
+  xAccount         String?
   instagramAccount String?
 
   userId String @unique
-  user User @relation( fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model JobSeeker {
-  id String @id @default(uuid())
-  name String
-  about String
+  id     String @id @default(uuid())
+  name   String
+  about  String
   resume String
 
-  user User @relation( fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   userId String @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -75,30 +79,29 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 

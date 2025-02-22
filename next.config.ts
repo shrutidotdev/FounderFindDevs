@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
       },
       {
         hostname: "plus.unsplash.com",
+      },
+      {
+        hostname: "utfs.io",
       }
     ],
   },

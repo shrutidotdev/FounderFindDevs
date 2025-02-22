@@ -12,7 +12,7 @@ interface UserSelectionTypeProps {
   onSelect: (type: UserSelectionType) => void;
 }
 
-export default function UserSelectionType({ onSelect }: UserSelectionTypeProps) {
+export default function UserSelectionTypeForm({ onSelect }: UserSelectionTypeProps) {
 
 
   const cardVariants = {

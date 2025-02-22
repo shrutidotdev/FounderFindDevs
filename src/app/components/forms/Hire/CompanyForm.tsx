@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Briefcase, Building2, Globe, MapPin, FileImage, Twitter, Instagram } from "lucide-react";
-import React from "react";
-import { companySchema } from "@/lib/zodSchema";
+import React, { useState } from "react";
+import companySchema  from "../../../../lib/zodSchema";
 import {
   Form,
   FormControl,
@@ -28,6 +28,8 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { countryList } from "@/app/utils/contryLists";
 import {  UploadDropzone } from "../../Frontend/UploadThing";
+import { createCompany } from "@/app/actions";
+import Image from "next/image";
 
 export default function CompanyForm() {
   const form = useForm<z.infer<typeof companySchema>>({
@@ -42,11 +44,28 @@ export default function CompanyForm() {
       instagramAccount: "",
     },
   });
+  // Creatign a pending state
+  const [pending, setPending] = useState(false);
 
-  const onSubmit = (data: z.infer<typeof companySchema>) => {
-    toast.success("Company information submitted successfully!");
-    console.log(data);
-  };
+  async function onSubmit(data: z.infer<typeof companySchema>) {
+    try {
+      setPending(true);
+      await createCompany(data);
+      toast.success("Company information submitted successfully!");
+      console.log(data);
+      form.reset();
+     
+    } catch (error) {
+      if(error instanceof Error && error.message !== "NEXT_REDIRECT") {
+        toast.error(error.message);
+        console.log("Something went wrong",error.message);
+      }
+    } finally {
+      setPending(false);
+
+    }
+ 
+  }
 
   return (
     <div className="min-h-screen mt-6">
@@ -70,7 +89,7 @@ export default function CompanyForm() {
         </div>
 
         {/* Form Section */}
-        <Form {...form} >
+        <Form {...form}>
           <form 
             onSubmit={form.handleSubmit(onSubmit)} 
             className="form-container rounded-lg bg-black  p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8"
@@ -165,12 +184,18 @@ export default function CompanyForm() {
                       Company Logo
                     </FormLabel>
                     <FormControl>
-                      <UploadDropzone endpoint="imageUploader" onClientUploadComplete={( res) => {field.onChange(res[0].url)}} onUploadError={(e) => {
-                        console.log("Something Went Wrong")}} className="border-primary ut-button:bg-white ut-button:text-black ut-button:font-semibold ut-button:hover:bg-white/80 ut-button:ut-allowed-content:* ut-label:text-white/60 ut-upload-icon:text-rose-400" />
+                     {
+                      field.value ? (
+                     <div>
+                         <Image src={field.value} className="w-20 h-20 relative" alt="Company Logo" width={80} height={80} />
+                     </div>
+                      ) : (
+                        <UploadDropzone endpoint="imageUploader" onClientUploadComplete={( res) => {field.onChange(res[0].url)}} onUploadError={(e) => {
+                          console.log("Something Went Wrong")}} className="border-primary ut-button:bg-white ut-button:text-black ut-button:font-semibold ut-button:hover:bg-white/80 ut-button:ut-allowed-content:* ut-label:text-white/60 ut-upload-icon:text-rose-400" />
+                      )
+                     }
                     </FormControl>
-                    <FormDescription className="text-white/60 text-sm">
-                      Provide logo of your company.
-                    </FormDescription>
+                   
                     <FormMessage className="text-rose-300" />
                   </FormItem>
                 )}
@@ -255,8 +280,12 @@ export default function CompanyForm() {
               <Button 
                 type="submit" 
                 className="bg-white text-black hover:bg-white/90 w-full sm:w-auto"
+                disabled={pending}
               >
-                Save Company Profile
+                {/* Save Company Profile */}
+                {
+                pending ? "Saving..." : "Save Company Profile"
+               }
               </Button>
             </div>
           </form>
