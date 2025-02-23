@@ -186,8 +186,8 @@ export default function CompanyForm() {
                     <FormControl>
                      {
                       field.value ? (
-                     <div>
-                         <Image src={field.value} className="w-20 h-20 relative" alt="Company Logo" width={80} height={80} />
+                     <div className="w-fit relative">
+                         <Image src={field.value} className="rounded-lg" alt="Company Logo" width={80} height={80} />
                      </div>
                       ) : (
                         <UploadDropzone endpoint="imageUploader" onClientUploadComplete={( res) => {field.onChange(res[0].url)}} onUploadError={(e) => {
