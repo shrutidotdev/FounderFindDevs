@@ -5,12 +5,13 @@ import { ArrowLeft } from "lucide-react";
 import UserSelectionTypeForm from "./UserSelectionType"
 import { Card, CardContent } from "@/components/ui/card";
 import CompanyForm from "./CompanyForm";
+// import JobSeekerForm from "./JobSeekerForm";
 
-type UserSelectionType = "company" | "jobseeker" | undefined;
+type UserSelectionType = "company" | "jobseeker" | null;
 
 const HiringForm = () => {
   const [step, setStep] = useState(1);
-  const [userType, setUserType] = useState<UserSelectionType>(undefined);
+  const [userType, setUserType] = useState<UserSelectionType>(null);
 // this function will handle the user type selection and move to the next step the hiring page for company or jobseeker to fill the form
   function handleUserTypeSelection(type: UserSelectionType) {
     setUserType(type);
@@ -21,7 +22,7 @@ const HiringForm = () => {
     switch (step) {
       case 1: return <UserSelectionTypeForm onSelect={handleUserTypeSelection} />
 
-        case 2: return userType === "company" ? <CompanyForm /> : <h1>Jobseeker Form</h1>
+        case 2: return userType === "company" ? <CompanyForm /> : <div>JobSeekerForm</div>;
         default: return null
     }
   }

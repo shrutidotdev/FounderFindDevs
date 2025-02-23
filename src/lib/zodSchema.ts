@@ -7,6 +7,6 @@ const companySchema = z.object({
     logo: z.string().min(1, { message: "Please Upload a logo for your company" }),
     website: z.string().url({ message: "Please provide a valid website URL" }),
     xAccount: z.string().optional(),
-    instagramAccount: z.string().optional(),
+   
 })
 export default companySchema;

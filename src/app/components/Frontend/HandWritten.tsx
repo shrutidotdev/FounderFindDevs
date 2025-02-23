@@ -6,9 +6,11 @@ interface HandWrittenTitleProps {
   title?: string
   subtitle?: string
 }
+// Want to add Sticky add 
 
 export default function HandWrittenTitle({
-  title = "Hand Written",
+  title = "Get Hired Today",
+
 }: HandWrittenTitleProps) {
   const draw = {
     hidden: { pathLength: 0, opacity: 0 },
@@ -23,7 +25,7 @@ export default function HandWrittenTitle({
   }
 
   return (
-    <div className="relative w-full max-w-xl mx-auto py-24 ">
+    <div className="relative w-[60%] mx-auto py-24 bg-rose-400 rounded-lg overflow-hidden">
       <div className="absolute inset-0">
         <motion.svg
           width="100%"
@@ -33,7 +35,7 @@ export default function HandWrittenTitle({
           animate="visible"
           className="w-full h-full"
         >
-          <title>Job Board</title>
+          
           <motion.path
             d="M 950 90 
                            C 1250 300, 1050 480, 600 520
@@ -52,13 +54,14 @@ export default function HandWrittenTitle({
       </div>
       <div className="relative text-center z-10 flex flex-col items-center justify-center">
         <motion.h1
-          className="text-xl md:text-2xl text-white dark:text-white tracking-tighter flex items-center gap-2"
+          className="text-xl md:text-2xl text-white font-bold tracking-tighter flex items-center gap-2"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
           {title}
         </motion.h1>
+        
         
       </div>
     </div>

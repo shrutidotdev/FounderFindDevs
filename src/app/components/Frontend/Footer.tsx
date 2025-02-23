@@ -17,7 +17,7 @@ export default function Footer() {
             <p className="text-red-100/70 mt-4">
             Creating world-class job platforms with innovative design.
             </p>
-            <div className="flex space-x-4 mt-10">
+            <div className="flex space-x-4 mt-[5.5rem]">
               <Link href="#" className="px-6 py-3 rounded-full bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 text-black font-semibold hover:opacity-90 transition-opacity">
                 Twitter
               </Link>

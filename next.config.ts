@@ -8,10 +8,12 @@ const nextConfig: NextConfig = {
         hostname: "images.unsplash.com",
       },
       {
-        hostname: "plus.unsplash.com",
+        hostname: "o6bmt406v9.ufs.sh",
       },
       {
         hostname: "utfs.io",
+        port: "",
+        protocol: "https",
       }
     ],
   },

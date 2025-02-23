@@ -6,6 +6,8 @@ import GlassMorphism from "@/components/ui/GlassMorphism"; // Import your GlassM
 import Navbar from "./components/Frontend/Navbar";
 import Footer from "./components/Frontend/Footer";
 
+import { Toaster } from "sonner";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -61,6 +63,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </div>
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   );

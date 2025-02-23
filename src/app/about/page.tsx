@@ -80,7 +80,7 @@ export default function About() {
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#fa7272] via-transparent to-[#830303]/80 pointer-events-none" />
+      {/* <div className="absolute inset-0 bg-gradient-to-t from-[#fa7272] via-transparent to-[#830303]/80 pointer-events-none" /> */}
     </div>
   )
 }

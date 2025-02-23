@@ -42,7 +42,7 @@ async function LoginForm() {
             >
                <SubmitButton 
                 width="w-full"
-              variant="default"
+              variant="outline"
               icon={<Google />}
               text="Login with Google" 
               />

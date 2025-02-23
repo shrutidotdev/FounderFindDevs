@@ -51,13 +51,13 @@ async function Navbar() {
                   href="/login"
                   className="text-white font-semibold "
                 >
-                  <Button>Login</Button>
+                  <Button variant="outline" className="bg-white text-black hover:text-white hover:bg-red-400 ">Login</Button>
                 </Link>
                 <Link
                   href="/signup"
                   className="text-white font-semibold hover:text-gray-200 transition-colors"
                 >
-                  <Button>Sign Up</Button>
+                  <Button variant="outline" className="bg-white text-black hover:text-white hover:bg-red-400 ">Sign Up</Button>
                 </Link>
               </>
             )}  
