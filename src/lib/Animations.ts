@@ -11,3 +11,10 @@ export const fadeInUp = {
       }
     }
   };
+
+export const cardHover = {
+  hover: { 
+    y: -5,
+    transition: { duration: 0.2 }
+  }
+};

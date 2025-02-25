@@ -60,6 +60,8 @@ model JobSeeker {
   name   String
   about  String
   resume String
+  portfolioLink String?
+  LinkedIn String
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
 

@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import UserSelectionTypeForm from "./UserSelectionType"
 import { Card, CardContent } from "@/components/ui/card";
 import CompanyForm from "./CompanyForm";
-// import JobSeekerForm from "./JobSeekerForm";
+import JobSeekerForm from "./JobSeekerForm";
 
 type UserSelectionType = "company" | "jobseeker" | null;
 
@@ -22,7 +22,7 @@ const HiringForm = () => {
     switch (step) {
       case 1: return <UserSelectionTypeForm onSelect={handleUserTypeSelection} />
 
-        case 2: return userType === "company" ? <CompanyForm /> : <div>JobSeekerForm</div>;
+        case 2: return userType === "company" ? <CompanyForm /> : <JobSeekerForm />;
         default: return null
     }
   }

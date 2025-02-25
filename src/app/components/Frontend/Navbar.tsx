@@ -26,7 +26,7 @@ async function Navbar() {
               width={40}
               height={40}
             />
-            Job Board
+            FounderFindsDevs
           </Link>
 
          {/* Sign In / Sign Up / Logout */}

@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
-  Briefcase,
   Building2,
   Globe,
   MapPin,
@@ -14,7 +13,7 @@ import {
   XIcon,
 } from "lucide-react";
 import React, { useState } from "react";
-import companySchema from "../../../../lib/zodSchema";
+import {companySchema} from "../../../../lib/zodSchema";
 import {
   Form,
   FormControl,
@@ -39,7 +38,7 @@ import { countryList } from "@/app/utils/contryLists";
 import { UploadDropzone } from "../../Frontend/UploadThing";
 import { createCompany } from "@/app/actions";
 import Image from "next/image";
-import { error } from "console";
+import { useRouter } from "next/navigation";
 
 export default function CompanyForm() {
   const form = useForm<z.infer<typeof companySchema>>({
@@ -56,6 +55,7 @@ export default function CompanyForm() {
   
   // Creatign a pending state
   const [pending, setPending] = useState(false);
+  const router = useRouter();
 
   async function onSubmit(data: z.infer<typeof companySchema>) {
     try {
@@ -68,11 +68,13 @@ export default function CompanyForm() {
         }
         
         if (result?.redirect) {
-            window.location.href = result.redirect;
-            return;
+          toast.success("Company details updated successfully! ✅");
+          router.push(result.redirect);
+          return
         }
         
-        toast.success("Company information submitted successfully!");
+        toast.success("New company profile created! 🎉");
+
         form.reset();
         
     } catch (error) {
@@ -90,7 +92,7 @@ export default function CompanyForm() {
         <div className="form-container rounded-lg">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4 sm:mb-6">
             <div className="bg-white/10 p-2 sm:p-3 rounded-lg">
-              <Briefcase className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+              <Building2 className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
             </div>
             <div className="space-y-2">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
