@@ -4,9 +4,34 @@ import { requireUser } from "./utils/requireUser";
 import { companySchema, jobSeekerSchema } from "@/lib/zodSchema";
 import { z } from "zod";
 import { toast } from "sonner";
+import { detectBot, request } from "@arcjet/next";
+import arcjet, {shield} from "./arcjet";
+
+
+const aj = arcjet
+.withRule(
+    shield({
+        mode: "LIVE",
+    })
+).withRule(
+    detectBot({
+        mode: "LIVE",
+        allow: []
+    })
+)
 
 async function createCompany(data: z.infer<typeof companySchema>) {
     const session = await requireUser();
+
+    // Arcject the data
+    const req = await request();
+    const decision = await aj.protect(req); // Deduct 5 tokens from the bucket
+    console.log("Arcjet decision", decision);
+
+    if(decision.isDenied()){
+        toast.message("You have been detected as a bot. You are FORBIDDEN from accessing this resource.");
+    }
+
 
     try {
         // Make sure data is not null
@@ -48,6 +73,19 @@ async function createCompany(data: z.infer<typeof companySchema>) {
 }
 
 async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
+
+
+    // Arcject the data
+    const req = await request();
+    const decision = await aj.protect(req); // Deduct 5 tokens from the bucket
+    console.log("Arcjet decision", decision);
+
+    if(decision.isDenied()){
+        toast.message("You have been detected as a bot. You are FORBIDDEN from accessing this resource.");
+    }
+
+
+
     try {
       const user = await requireUser();
       const validateData = jobSeekerSchema.parse(data);

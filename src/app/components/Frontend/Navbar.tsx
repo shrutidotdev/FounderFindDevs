@@ -3,6 +3,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { auth, signOut } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import UserDropDown from "./UserDropDown";
 
 async function Navbar() {
   const session = await auth();
@@ -30,7 +31,7 @@ async function Navbar() {
           </Link>
 
          {/* Sign In / Sign Up / Logout */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center">
             {session?.user ? (
               <form
                 action={async () => {
@@ -38,12 +39,28 @@ async function Navbar() {
                   await signOut({ redirectTo: "/" });
                 }}
               >
+                <div className="flex items-center gap-2">
                 <Link
                   href="/"
                   className="text-white font-semibold hover:text-gray-200  transition-colors"
                 >
-                  <Button className="bg-white text-black hover:text-white hover:bg-red-400 ">Logout</Button>
+                  <Button className="bg-white text-black hover:text-white hover:bg-red-400 ">Post Job</Button>
                 </Link>
+
+                <Link
+                  href="/post-job"
+                  className="text-white font-semibold hover:text-gray-200  transition-colors"
+                >
+                  
+                </Link>
+               
+
+                <UserDropDown 
+                name={ session.user.name as string} 
+                email={ session.user.email as string}
+                image={ session.user.image as string}/>
+                </div>
+               
               </form>
             ) : (
               <>

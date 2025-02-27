@@ -35,7 +35,10 @@
 
 
 }
-
+.flag-emoji {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+  font-size: 1.2em;
+}
 .bg-background {
   background-color: var(--background);
 }
@@ -73,4 +76,21 @@
   .header-title {
     @apply text-2xl md:text-4xl lg:text-5xl font-extrabold flex items-center gap-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300;
   }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+
+
+  }
+  body {
+    @apply bg-background text-foreground;
+
+
+  }
+
+
 }

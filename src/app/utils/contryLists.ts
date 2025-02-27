@@ -59,7 +59,7 @@ const getFlagEmoji = (countryCode: string) => {
       name: "Anguilla",
       code: "AI",
       phoneCode: "+1264",
-      flagEmoji: "🇦🇮",
+      flagEmoji: getFlagEmoji("AI"),
     },
     {
       name: "Antarctica",
