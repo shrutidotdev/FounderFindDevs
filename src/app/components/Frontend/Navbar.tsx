@@ -31,7 +31,7 @@ async function Navbar() {
           </Link>
 
          {/* Sign In / Sign Up / Logout */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center gap-2">
             {session?.user ? (
               <form
                 action={async () => {

@@ -31,6 +31,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { countryList } from "@/app/utils/contryLists";
 import SalaryRangeSelector from "../../Frontend/SalaryRangeSelector";
+import JobDescriptionEditor from "../../TextEditor/JobDescriptionEditor";
 
 const CreateJobPostForm = () => {
   const form = useForm<z.infer<typeof jobPostSchema>>({
@@ -94,8 +95,8 @@ const CreateJobPostForm = () => {
                     <FormItem>
                       <FormLabel>Employment Type</FormLabel>
                       <Select
-                      onOpenChange={field.onChange}
-                      defaultValue={field.value}
+                        onOpenChange={field.onChange}
+                        defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -109,7 +110,9 @@ const CreateJobPostForm = () => {
                             <SelectItem value="Part Time">Part Time</SelectItem>
                             <SelectItem value="Freelance">Freelance</SelectItem>
                             <SelectItem value="Contract">Contract</SelectItem>
-                            <SelectItem value="Internship">Internship</SelectItem>
+                            <SelectItem value="Internship">
+                              Internship
+                            </SelectItem>
                           </SelectGroup>
                         </SelectContent>
                       </Select>
@@ -126,8 +129,8 @@ const CreateJobPostForm = () => {
                     <FormItem>
                       <FormLabel>Location</FormLabel>
                       <Select
-                      onOpenChange={field.onChange}
-                      defaultValue={field.value}
+                        onOpenChange={field.onChange}
+                        defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -138,7 +141,10 @@ const CreateJobPostForm = () => {
                           <SelectGroup>
                             <SelectLabel> Location</SelectLabel>
                             {countryList.map((country) => (
-                              <SelectItem key={country.code} value={country.code} >
+                              <SelectItem
+                                key={country.code}
+                                value={country.code}
+                              >
                                 {country.name}
                                 {` ${country.flagEmoji}`}
                               </SelectItem>
@@ -155,17 +161,32 @@ const CreateJobPostForm = () => {
                 <FormItem>
                   <FormLabel>Salary Range</FormLabel>
                   <FormControl>
-                    <SalaryRangeSelector 
-                    control={form.control} 
-                    minSalary={700000} 
-                    maxSalary={5000000} 
-                    step={100} 
-                    currency="INR"
+                    <SalaryRangeSelector
+                      control={form.control}
+                      minSalary={700000}
+                      maxSalary={5000000}
+                      step={100}
+                      currency="INR"
                     />
-                    
                   </FormControl>
                 </FormItem>
               </div>
+
+              <FormField
+                control={form.control}
+                name="jobDescription"
+                render={({ field }) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Job Description</FormLabel>
+                      <FormControl>
+                        <JobDescriptionEditor />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              />
             </CardContent>
           </Card>
         </form>
