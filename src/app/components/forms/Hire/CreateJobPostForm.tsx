@@ -172,21 +172,23 @@ const CreateJobPostForm = () => {
                 </FormItem>
               </div>
 
-              <FormField
-                control={form.control}
-                name="jobDescription"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormLabel>Job Description</FormLabel>
-                      <FormControl>
-                        <JobDescriptionEditor />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              />
+              <div className="mt-9">
+                <FormField
+                  control={form.control}
+                  name="jobDescription"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Job Description</FormLabel>
+                        <FormControl>
+                          <JobDescriptionEditor />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
             </CardContent>
           </Card>
         </form>

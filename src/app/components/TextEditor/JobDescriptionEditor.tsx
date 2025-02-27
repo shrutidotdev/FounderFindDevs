@@ -11,9 +11,9 @@ const JobDescriptionEditor = () => {
   })
 
   return (
-    <div className='w-full border rounded-lg overflow-hidden bg-card text-card-foreground shadow-sm'> 
+    <div className='w-full border border-white/50 rounded-lg overflow-hidden  shadow-sm '> 
     <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      <EditorContent editor={editor} className='px-8 min-h-[200px]'  />
     </div>
   )
 }

@@ -21,7 +21,7 @@ const MenuBar = ({ editor }: EditorProps) => {
     return null;
   }
   return (
-    <div>
+    <div className="flex items-center gap-2 p-4  bg-black text-white rounded-lg ">
       <TooltipProvider>
         {/* BOLD */}
         <Tooltip>
