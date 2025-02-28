@@ -200,7 +200,7 @@ const CreateJobPostForm = () => {
                       <FormItem>
                         <FormLabel>Benefits</FormLabel>
                         <FormControl>
-                          <BenefitSelector  />
+                          <BenefitSelector field={field}  />
                         </FormControl>
                       </FormItem>
                     );
