@@ -207,6 +207,87 @@ const CreateJobPostForm = () => {
                   }}
                 />
               </div>
+
+             
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-primary" >Company Information</CardTitle>
+            </CardHeader>
+            <CardContent >
+              <div className="grid grid-cols-1  md:grid-cols-2 gap-4">
+                	{/* Company Name */}
+                <FormField
+                control={form.control}
+                name="companyName"
+                render={ ({ field}) => {
+                  return (
+                    <FormItem>
+                      <FormLabel>Company Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Company Name" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
+                />
+
+                {/* Company location */}
+                <FormField
+                  control={form.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Location</FormLabel>
+                      <Select
+                        onOpenChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select Location" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Company Location</SelectLabel>
+                            {countryList.map((country) => (
+                              <SelectItem
+                                key={country.code}
+                                value={country.code}
+                              >
+                                {country.name}
+                                {` ${country.flagEmoji}`}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Company website */}
+                <FormField 
+                control={form.control}
+                name="companyWebsite"
+                render={ ({ field}) => {
+                  return(
+                    <FormItem>
+                      <FormLabel>Company Website</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Company Website" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )
+                }}
+                />
+
+              </div>
             </CardContent>
           </Card>
         </form>

@@ -74,8 +74,10 @@ const BenefitSelector = ({ field }: BenefitSelectorProps) => {
         })}
       </div>
 
-      <div>
-        <h2 className="text-2xl font-bold mb-4 text-primary">Total Selected Benefits: {(field.value || []).length}</h2>
+      <div className="pt-5">
+        <h2 className="text-lg text-center   font-semibold text-primary bg-rose-400 py-2 px-4 rounded-lg">
+          Total Selected Benefits: {(field.value || []).length}
+        </h2>
       </div>
     </>
   );
