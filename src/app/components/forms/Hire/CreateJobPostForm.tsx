@@ -27,11 +27,12 @@ import {
 } from "@/components/ui/select";
 import { Building2 } from "lucide-react";
 import React from "react";
-import { useForm } from "react-hook-form";
+import { ControllerRenderProps, useForm } from "react-hook-form";
 import z from "zod";
 import { countryList } from "@/app/utils/contryLists";
 import SalaryRangeSelector from "../../Frontend/SalaryRangeSelector";
 import JobDescriptionEditor from "../../TextEditor/JobDescriptionEditor";
+import BenefitSelector from "../../Frontend/BenefitSelector";
 
 const CreateJobPostForm = () => {
   const form = useForm<z.infer<typeof jobPostSchema>>({
@@ -181,9 +182,26 @@ const CreateJobPostForm = () => {
                       <FormItem>
                         <FormLabel>Job Description</FormLabel>
                         <FormControl>
-                          <JobDescriptionEditor />
+                          <JobDescriptionEditor field={field} />
                         </FormControl>
-                        <FormMessage />
+                       
+                      </FormItem>
+                    );
+                  }}
+                />
+              </div>
+
+              <div className="mt-9">
+                <FormField
+                  control={form.control}
+                  name="benefits"
+                  render={({ field }) => {
+                    return (
+                      <FormItem>
+                        <FormLabel>Benefits</FormLabel>
+                        <FormControl>
+                          <BenefitSelector  />
+                        </FormControl>
                       </FormItem>
                     );
                   }}
