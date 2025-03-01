@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+"use client";
+import { useState } from "react";
 import { Slider } from "../../../components/ui/Slider";
 import { Control, useController } from "react-hook-form";
 

@@ -1,5 +1,4 @@
-import {fadeInUp} from "@/lib/Animations";
-import { motion } from "motion/react";
+
 import React from "react";
 const statsData = [
   {
@@ -26,21 +25,18 @@ const statsData = [
 
 const Stats = () => {
   return (
-    <div>
+    <div className="flex justify-evenly mt-20 ">
       {/* Stats Section */}
-      <motion.div
-        variants={fadeInUp}
-        className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8"
-      >
+     
         {statsData.map(({ title, description , id}) => (
        
-            <div className="p-4 text-center" key={id}>
+            <div className="p-4" key={id}>
               <div className="text-2xl font-bold text-white">{title}</div>
               <div className="text-white/70 text-sm">{description}</div>
             </div>
          
         ))}
-      </motion.div>
+     
     </div>
   );
 };

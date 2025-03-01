@@ -26,9 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Building2, FileImage, XIcon, Briefcase, Globe, DollarSign, ListChecks, Building } from "lucide-react";
-import React from "react";
-import { useForm } from "react-hook-form";
+import {  FileImage, XIcon, Briefcase, Globe, DollarSign, ListChecks, Building } from "lucide-react";
+
 import z from "zod";
 import { countryList } from "@/app/utils/contryLists";
 import SalaryRangeSelector from "../../Frontend/SalaryRangeSelector";
@@ -40,27 +39,28 @@ import { Button } from "@/components/ui/button";
 import { UploadDropzone } from "../../Frontend/UploadThing";
 import { toast } from "sonner";
 import JobListingDuration from "../../Frontend/JobListingDuration";
+import { useForm } from "react-hook-form";
 
 interface CompanyProps {
-    name: string;
-    location: string;
-    about: string;
-    logo: string;
-    website: string;
-    xAccount: string;
+    companyName: string;
+    companyLocation: string;
+    companyAbout: string;
+    companyLogo: string;
+    companyWebsite: string;
+    companyXAccount: string | null;
 }
-const CreateJobPostForm = () => {
+const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, companyLogo, companyWebsite, companyXAccount }: CompanyProps) => {
   const form = useForm<z.infer<typeof jobPostSchema>>({
     resolver: zodResolver(jobPostSchema),
     defaultValues: {
-      companyName: "",
-      companyLocation: "",
-      aboutCompany: "",
-      companyLogo: "",
-      companyWebsite: "",
-      companyXAccount: "",
+      companyName: companyName,
+      companyLocation: companyLocation,
+      aboutCompany: companyAbout,
+      companyLogo: companyLogo,
+      companyWebsite: companyWebsite,
+      companyXAccount: companyXAccount || " ",
 
-      jobtitle: "",
+      jobTitle: "",
       employmentType: "",
       location: "",
       salaryFrom: 0,
@@ -98,7 +98,7 @@ const CreateJobPostForm = () => {
                 {/* title job */}
                 <FormField
                   control={form.control}
-                  name="jobtitle"
+                  name="jobTitle"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="text-foreground font-medium">Job Title</FormLabel>

@@ -19,7 +19,7 @@ export const jobSeekerSchema = z.object({
 })
 
 export const jobPostSchema = z.object({
-    jobtitle: z.string().min(1, { message: "Job title should be at least 1 character long" }),
+    jobTitle: z.string().min(1, { message: "Job title should be at least 1 character long" }),
     employmentType: z.string().min(1, { message: "Please select an employment type" }),
     location: z.string().min(1, { message: "Please select a location" }),
     salaryFrom: z.number().min(1, { message: "Please provide a valid salary range" }),
@@ -27,8 +27,6 @@ export const jobPostSchema = z.object({
     jobDescription: z.string().min(10, { message: "Please provide a brief description about the job" }),
     listingDuration: z.number().min(1, { message: "Please select a listing duration" }),
     benefits: z.array(z.string()).min(1, { message: "Please provide at least one benefit" }),
-
-    // Companies schema
    companyName: z.string().min(1, { message: "Company name should be at least 1 character long" }),
    companyLocation: z.string().min(1, { message: "Location should be at least 1 character long" }),
    aboutCompany: z.string().min(10, { message: "Please provide a brief description about the company" }),

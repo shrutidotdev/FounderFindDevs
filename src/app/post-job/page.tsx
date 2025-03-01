@@ -1,4 +1,3 @@
-"use client";
 
 import {
   Card,
@@ -12,11 +11,9 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Quote } from "lucide-react";
-import { motion } from "motion/react";
 import CreateJobPostForm from "../components/forms/Hire/CreateJobPostForm";
 import { prisma } from "@/lib/prisma";
-import { toast } from "sonner";
-import { redirect } from "next/navigation";
+
 import { requireUser } from "../utils/requireUser";
 
 const companies = [
@@ -63,52 +60,51 @@ const testimonials = [
     company: "EcoFriendly Products",
   },
 ];
+
 async function getCompanyData(userId: string) {
-  const data = await prisma.company.findUnique({
-    where: {
-      userId: userId,
-    },
+  return await prisma.company.findUnique({
+    where: { userId },
     select: {
       name: true,
       logo: true,
       about: true,
       website: true,
       location: true,
-
       xAccount: true,
     },
   });
-
-  if (!data) {
-    toast.error("Company not found");
-    return redirect("/");
-  }
-
-  return data;
 }
 
 async function PostJob() {
-    const session = await requireUser()
-    const data = await getCompanyData(session.id );
+  const session = await requireUser();
+  const data = await getCompanyData(session.id);
+
   return (
     <div className="container mx-auto px-4 py-8 min-h-screen bg-gradient-to-b from-background to-secondary/20">
       <div className="max-w-7xl mx-auto">
-        {/* <div className="mb-12">
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
-                        Post Your Job
-                    </h1>
-                    <p className="text-center text-muted-foreground max-w-2xl mx-auto">
-                        Connect with top talent by posting your job opportunity. Our platform helps you find the perfect match for your team.
-                    </p>
-                </div> */}
+        <div className="mb-12">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
+            Post Your Job
+          </h1>
+          <p className="text-center text-muted-foreground max-w-2xl mx-auto">
+            Connect with top talent by posting your job opportunity. Our platform helps you find the perfect match for your team.
+          </p>
+        </div>
 
         <Stats />
 
         {/* Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-10">
-          {/* Job Posting Form - Takes more space on larger screens */}
+          {/* Job Posting Form */}
           <div className="lg:col-span-7 xl:col-span-8 order-2 lg:order-1">
-            <CreateJobPostForm />
+            <CreateJobPostForm
+              companyAbout={data?.about}
+              companyLocation={data?.location}
+              companyLogo={data?.logo}
+              companyName={data?.name}
+              companyWebsite={data?.website}
+              companyXAccount={data?.xAccount}
+            />
           </div>
 
           {/* Companies & Testimonials Section */}
@@ -121,34 +117,27 @@ async function PostJob() {
                   Trusted by Industry Leaders
                 </CardTitle>
                 <CardDescription className="text-muted-foreground">
-                  Join thousands of companies who trust us to find the right
-                  talent.
+                  Join thousands of companies who trust us to find the right talent.
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 items-center justify-items-center py-4">
-                  {companies.map((company, index) => (
-                    <motion.div
-                      key={company.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className="relative w-24 h-12 md:w-28 md:h-14 flex items-center justify-center group"
-                    >
+                  {companies.map((company) => (
+                    <div key={company.id} className="relative w-24 h-12 md:w-28 md:h-14 flex items-center justify-center group">
                       <Image
                         src={company.logo}
                         alt={company.name}
                         fill
                         className="object-contain filter group-hover:brightness-75 transition-all duration-300 transform group-hover:scale-105"
                       />
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
 
             {/* Testimonials Section */}
-            <Card className="overflow-hidden border-primary/10 shadow-lg ">
+            <Card className="overflow-hidden border-primary/10 shadow-lg">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 pointer-events-none" />
               <CardHeader className="relative">
                 <div className="flex items-center gap-2 mb-2">
@@ -165,13 +154,7 @@ async function PostJob() {
                 <ScrollArea className="h-[400px] pr-4">
                   <div className="space-y-6">
                     {testimonials.map((testimonial, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.2 }}
-                        className="relative "
-                      >
+                      <div key={index} className="relative">
                         <div className="border border-primary/10 bg-card text-card-foreground p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
                           <blockquote className="text-lg italic text-muted-foreground mb-4">
                             "{testimonial.quote}"
@@ -188,7 +171,7 @@ async function PostJob() {
                             </div>
                           </footer>
                         </div>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
                 </ScrollArea>
@@ -202,3 +185,4 @@ async function PostJob() {
 }
 
 export default PostJob;
+export { getCompanyData };

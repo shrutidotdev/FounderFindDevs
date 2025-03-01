@@ -41,18 +41,13 @@ async function Navbar() {
               >
                 <div className="flex items-center gap-2">
                 <Link
-                  href="/"
+                 href="/post-job"
                   className="text-white font-semibold hover:text-gray-200  transition-colors"
                 >
                   <Button className="bg-white text-black hover:text-white hover:bg-red-400 ">Post Job</Button>
                 </Link>
 
-                <Link
-                  href="/post-job"
-                  className="text-white font-semibold hover:text-gray-200  transition-colors"
-                >
-                  
-                </Link>
+              
                
 
                 <UserDropDown 
