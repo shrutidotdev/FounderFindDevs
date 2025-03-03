@@ -1,20 +1,18 @@
-import type { NextConfig } from "next";
-import { hostname } from "os";
-
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  swcMinify: true, // Enable faster compilation
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: '**', // Allow all HTTPS images
       },
       {
         protocol: 'http',
-        hostname: '**',
-      }
+        hostname: '**', // Allow all HTTP images (not recommended for security)
+      },
     ],
   },
 };
 
-
-export default nextConfig;
+module.exports = nextConfig;
