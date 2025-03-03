@@ -1,4 +1,3 @@
-
 import {
   Card,
   CardContent,
@@ -11,7 +10,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Quote } from "lucide-react";
-import CreateJobPostForm from "../components/forms/Hire/CreateJobPostForm";
+import CreateJobPostForm from "../components/forms/CreateJobPostForm";
 import { prisma } from "@/lib/prisma";
 
 import { requireUser } from "../utils/requireUser";
@@ -80,14 +79,15 @@ async function PostJob() {
   const data = await getCompanyData(session.id);
 
   return (
-    <div className="container mx-auto px-4 py-8 min-h-screen bg-gradient-to-b from-background to-secondary/20">
+    <div className="container mx-auto px-4 py-4 min-h-screen bg-gradient-to-b from-background to-secondary/20">
       <div className="max-w-7xl mx-auto">
-        <div className="mb-12">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
+        <div className="mt-10">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-purple-500">
             Post Your Job
           </h1>
-          <p className="text-center text-muted-foreground max-w-2xl mx-auto">
-            Connect with top talent by posting your job opportunity. Our platform helps you find the perfect match for your team.
+          <p className="text-center text-md text-white max-w-2xl mx-auto">
+            Connect with top talent by posting your job opportunity. Our
+            platform helps you find the perfect match for your team.
           </p>
         </div>
 
@@ -98,12 +98,12 @@ async function PostJob() {
           {/* Job Posting Form */}
           <div className="lg:col-span-7 xl:col-span-8 order-2 lg:order-1">
             <CreateJobPostForm
-              companyAbout={data?.about}
-              companyLocation={data?.location}
-              companyLogo={data?.logo}
-              companyName={data?.name}
-              companyWebsite={data?.website}
-              companyXAccount={data?.xAccount}
+              companyAbout={data?.about ?? ""}
+              companyLocation={data?.location ?? ""}
+              companyLogo={data?.logo ?? ""}
+              companyName={data?.name ?? ""}
+              companyWebsite={data?.website ?? ""}
+              companyXAccount={data?.xAccount ?? ""}
             />
           </div>
 
@@ -117,13 +117,17 @@ async function PostJob() {
                   Trusted by Industry Leaders
                 </CardTitle>
                 <CardDescription className="text-muted-foreground">
-                  Join thousands of companies who trust us to find the right talent.
+                  Join thousands of companies who trust us to find the right
+                  talent.
                 </CardDescription>
               </CardHeader>
               <CardContent className="relative">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 items-center justify-items-center py-4">
                   {companies.map((company) => (
-                    <div key={company.id} className="relative w-24 h-12 md:w-28 md:h-14 flex items-center justify-center group">
+                    <div
+                      key={company.id}
+                      className="relative w-24 h-12 md:w-28 md:h-14 flex items-center justify-center group"
+                    >
                       <Image
                         src={company.logo}
                         alt={company.name}
@@ -155,18 +159,18 @@ async function PostJob() {
                   <div className="space-y-6">
                     {testimonials.map((testimonial, index) => (
                       <div key={index} className="relative">
-                        <div className="border border-primary/10 bg-card text-card-foreground p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
-                          <blockquote className="text-lg italic text-muted-foreground mb-4">
+                        <div className="border border-primary/10 bg-rose-400 text-white p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
+                          <blockquote className="text-lg font-bold font-mono italic mb-4">
                             "{testimonial.quote}"
                           </blockquote>
-                          <Separator className="my-4 bg-primary/10" />
+                          <Separator className="my-4 bg-black" />
                           <footer className="flex flex-col md:flex-row md:items-center md:justify-between">
                             <div>
                               <div className="font-semibold text-primary">
                                 {testimonial.author}
                               </div>
-                              <div className="text-sm text-muted-foreground">
-                                {testimonial.company}
+                              <div className="text-sm text-gray-500 font-bold">
+                                -{testimonial.company}
                               </div>
                             </div>
                           </footer>

@@ -26,36 +26,53 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {  FileImage, XIcon, Briefcase, Globe, DollarSign, ListChecks, Building } from "lucide-react";
+import {
+  FileImage,
+  XIcon,
+  Briefcase,
+  Globe,
+  DollarSign,
+  ListChecks,
+  Building,
+} from "lucide-react";
 
-import z from "zod";
+import z, { set } from "zod";
 import { countryList } from "@/app/utils/contryLists";
-import SalaryRangeSelector from "../../Frontend/SalaryRangeSelector";
-import JobDescriptionEditor from "../../TextEditor/JobDescriptionEditor";
-import BenefitSelector from "../../Frontend/BenefitSelector";
+import SalaryRangeSelector from "../Frontend/SalaryRangeSelector";
+import JobDescriptionEditor from "../TextEditor/JobDescriptionEditor";
+import BenefitSelector from "../Frontend/BenefitSelector";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { UploadDropzone } from "../../Frontend/UploadThing";
+import { UploadDropzone } from "../Frontend/UploadThing";
 import { toast } from "sonner";
-import JobListingDuration from "../../Frontend/JobListingDuration";
+import JobListingDuration from "../Frontend/JobListingDuration";
 import { useForm } from "react-hook-form";
+import { createJob } from "@/app/actions";
+import { useState } from "react";
 
-interface CompanyProps {
-    companyName: string;
-    companyLocation: string;
-    companyAbout: string;
-    companyLogo: string;
-    companyWebsite: string;
-    companyXAccount: string | null;
+interface CreateJobFormProps {
+  companyName: string;
+  companyLocation: string;
+  companyAbout: string;
+  companyLogo: string;
+  companyWebsite: string;
+  companyXAccount: string | null;
 }
-const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, companyLogo, companyWebsite, companyXAccount }: CompanyProps) => {
+const CreateJobPostForm = ({
+  companyName,
+  companyLocation,
+  companyAbout,
+  companyLogo,
+  companyWebsite,
+  companyXAccount,
+}: CreateJobFormProps) => {
   const form = useForm<z.infer<typeof jobPostSchema>>({
     resolver: zodResolver(jobPostSchema),
     defaultValues: {
       companyName: companyName,
       companyLocation: companyLocation,
-      aboutCompany: companyAbout,
+      companyAbout: companyAbout,
       companyLogo: companyLogo,
       companyWebsite: companyWebsite,
       companyXAccount: companyXAccount || " ",
@@ -65,28 +82,45 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
       location: "",
       salaryFrom: 0,
       salaryTo: 0,
-      listingDuration: 0,
+      listingDuration: 60,
       jobDescription: "",
       benefits: [],
     },
   });
-  
+  const [pending, setPending] = useState(false);
+
   async function onSubmit(values: z.infer<typeof jobPostSchema>) {
-    console.log("Should be submitted: ", values);
-    toast.success("Job posted successfully! Your listing is now live.");
+    try {
+      setPending(true);
+      await createJob(values);
+
+      console.log(createJob(values))
+      toast.success("Job posted successfully! Your listing is now live.");
+    } catch (error) {
+      if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
+        console.log("Something went wrong: ", error.message);
+      }
+    } finally {
+      setPending(false);
+    }
   }
-  
+
   return (
-    <div className="w-full">
+    <main className="w-full">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-6"
+        >
           {/* Job Details Card */}
           <Card className="border border-primary/10 shadow-md overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-background pointer-events-none" />
             <CardHeader className="relative border-b border-border/40 pb-4">
               <div className="flex items-center gap-2 mb-2">
                 <Briefcase className="w-5 h-5 text-primary" />
-                <CardTitle className="text-2xl font-bold text-primary">Job Details</CardTitle>
+                <CardTitle className="text-2xl font-bold text-primary">
+                  Job Details
+                </CardTitle>
               </div>
               <CardDescription className="text-muted-foreground">
                 Provide information about the position you're hiring for
@@ -101,11 +135,13 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                   name="jobTitle"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground font-medium">Job Title</FormLabel>
+                      <FormLabel className="text-foreground font-medium">
+                        Job Title
+                      </FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="e.g. Senior Frontend Developer" 
-                          {...field} 
+                        <Input
+                          placeholder="e.g. Senior Frontend Developer"
+                          {...field}
                           className="border-input/60 focus:border-primary"
                         />
                       </FormControl>
@@ -120,9 +156,11 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                   name="employmentType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground font-medium">Employment Type</FormLabel>
+                      <FormLabel className="text-foreground font-medium">
+                        Employment Type
+                      </FormLabel>
                       <Select
-                        onOpenChange={field.onChange}
+                        onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
@@ -137,7 +175,9 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                             <SelectItem value="Part Time">Part Time</SelectItem>
                             <SelectItem value="Freelance">Freelance</SelectItem>
                             <SelectItem value="Contract">Contract</SelectItem>
-                            <SelectItem value="Internship">Internship</SelectItem>
+                            <SelectItem value="Internship">
+                              Internship
+                            </SelectItem>
                           </SelectGroup>
                         </SelectContent>
                       </Select>
@@ -149,39 +189,42 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                 {/* Location */}
                 <FormField
                   control={form.control}
-                  name="location"
+                  name="companyLocation"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground font-medium">
-                        <div className="flex items-center gap-1.5">
-                          <Globe className="h-3.5 w-3.5" />
-                          <span>Job Location</span>
-                        </div>
-                      </FormLabel>
+                      <FormLabel>Location</FormLabel>
                       <Select
-                        onOpenChange={field.onChange}
+                        onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger className="border-input/60 focus:border-primary">
+                          <SelectTrigger>
                             <SelectValue placeholder="Select Location" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
                           <SelectGroup>
+                            <SelectLabel>Worldwide</SelectLabel>
+                            <SelectItem value="worldwide">
+                              <span>🌍</span>
+                              <span className="pl-2">Worldwide</span>
+                            </SelectItem>
+                          </SelectGroup>
+                          <SelectGroup>
                             <SelectLabel>Location</SelectLabel>
                             {countryList.map((country) => (
                               <SelectItem
-                                key={country.code}
-                                value={country.code}
+                                value={country.name}
+                                key={country.name}
                               >
-                                {country.name}
-                                {` ${country.flagEmoji}`}
+                                <span>{country.flagEmoji}</span>
+                                <span className="pl-2">{country.name}</span>
                               </SelectItem>
                             ))}
                           </SelectGroup>
                         </SelectContent>
                       </Select>
+
                       <FormMessage />
                     </FormItem>
                   )}
@@ -207,6 +250,7 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                 </FormItem>
               </div>
 
+              {/* Job Description  */}
               <div className="mt-9">
                 <FormField
                   control={form.control}
@@ -229,6 +273,7 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                 />
               </div>
 
+              {/* Benefits */}
               <div className="mt-9">
                 <FormField
                   control={form.control}
@@ -236,7 +281,9 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="text-foreground font-medium">Benefits</FormLabel>
+                        <FormLabel className="text-foreground font-medium">
+                          Benefits
+                        </FormLabel>
                         <FormControl>
                           <BenefitSelector field={field} />
                         </FormControl>
@@ -254,7 +301,9 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
             <CardHeader className="relative border-b border-border/40 pb-4">
               <div className="flex items-center gap-2 mb-2">
                 <Building className="w-5 h-5 text-primary" />
-                <CardTitle className="text-2xl font-bold text-primary">Company Information</CardTitle>
+                <CardTitle className="text-2xl font-bold text-primary">
+                  Company Information
+                </CardTitle>
               </div>
               <CardDescription className="text-muted-foreground">
                 Tell candidates about your company and culture
@@ -269,11 +318,13 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="text-foreground font-medium">Company Name</FormLabel>
+                        <FormLabel className="text-foreground font-medium">
+                          Company Name
+                        </FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="e.g. Acme Corporation" 
-                            {...field} 
+                          <Input
+                            placeholder="e.g. Acme Corporation"
+                            {...field}
                             className="border-input/60 focus:border-primary"
                           />
                         </FormControl>
@@ -289,9 +340,11 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                   name="location"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-foreground font-medium">Company Location</FormLabel>
+                      <FormLabel className="text-foreground font-medium">
+                        Company Location
+                      </FormLabel>
                       <Select
-                        onOpenChange={field.onChange}
+                        onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
@@ -325,11 +378,13 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="text-foreground font-medium">Company Website</FormLabel>
+                        <FormLabel className="text-foreground font-medium">
+                          Company Website
+                        </FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="https://example.com" 
-                            {...field} 
+                          <Input
+                            placeholder="https://example.com"
+                            {...field}
                             className="border-input/60 focus:border-primary"
                           />
                         </FormControl>
@@ -346,11 +401,13 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel className="text-foreground font-medium">Company X Account</FormLabel>
+                        <FormLabel className="text-foreground font-medium">
+                          Company X Account
+                        </FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="@companyname" 
-                            {...field} 
+                          <Input
+                            placeholder="@companyname"
+                            {...field}
                             className="border-input/60 focus:border-primary"
                           />
                         </FormControl>
@@ -363,11 +420,13 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                 {/* Company Description */}
                 <FormField
                   control={form.control}
-                  name="aboutCompany"
+                  name="companyAbout"
                   render={({ field }) => {
                     return (
                       <FormItem className="md:col-span-2">
-                        <FormLabel className="text-foreground font-medium">Company Description</FormLabel>
+                        <FormLabel className="text-foreground font-medium">
+                          Company Description
+                        </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="Tell us about your company, culture, and values..."
@@ -380,7 +439,7 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                     );
                   }}
                 />
-                
+
                 {/* Logo Company */}
                 <FormField
                   control={form.control}
@@ -429,7 +488,7 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
                                 toast.error("Upload failed. Please try again.");
                               }
                             }}
-                            className="border-primary/30 ut-button:bg-primary ut-button:text-primary-foreground ut-button:font-semibold ut-button:hover:bg-primary/90 ut-button:ut-allowed-content:* ut-label:text-muted-foreground ut-upload-icon:text-primary"
+                            className="border-primary/30 ut-button:bg-rose-400 ut-button:text-white *:ut-button:text-white ut-button:font-semibold ut-button:hover:bg-purple-400 ut-button:ut-allowed-content:* ut-label:text-muted-foreground ut-upload-icon:text-primary"
                           />
                         )}
                       </FormControl>
@@ -442,10 +501,12 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
           </Card>
 
           {/* Listing Duration Card */}
-          <Card className="border border-primary/10 shadow-md overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-background pointer-events-none" />
-            <CardHeader className="relative border-b border-border/40 pb-4">
-              <CardTitle className="text-2xl font-bold text-primary">Job Listing Duration</CardTitle>
+          <Card className="overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none" />
+            <CardHeader className="relative pb-4">
+              <CardTitle className="text-2xl font-bold text-primary">
+                Job Listing Duration
+              </CardTitle>
               <CardDescription className="text-muted-foreground">
                 Choose how long your job posting should remain active
               </CardDescription>
@@ -466,19 +527,20 @@ const CreateJobPostForm = ({ companyName, companyLocation, companyAbout, company
               />
             </CardContent>
           </Card>
-          
-          <CardFooter className="px-0 pt-4">
-            <Button 
+
+          {/* Submit button */}
+
+          <Button
             variant="secondary"
-              type="submit" 
+            type="submit"
             className="w-full py-6"
-            >
-              Post Job
-            </Button>
-          </CardFooter>
+            disabled={pending}
+          >
+            {pending ? "Sumitting..." : "Create Job Post"}
+          </Button>
         </form>
       </Form>
-    </div>
+    </main>
   );
 };
 

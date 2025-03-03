@@ -32,7 +32,7 @@ const JobListingDuration = ({ field }: JobListingDurationProps) => {
                 <Label htmlFor={duration.days.toString()} className="w-full">
                   <Card
                     className={`w-full p-4 transition-colors ease-in-out scroll-smooth duration-300 ${
-                      isSelected ? "bg-rose-300 border-rose-400" : "bg-black border-gray-300"
+                      isSelected ? "bg-rose-400 border-rose-400" : "bg-black border-gray-300"
                     } border`}
                   >
                     {/* Flex container to separate Days and Price */}
@@ -40,12 +40,12 @@ const JobListingDuration = ({ field }: JobListingDurationProps) => {
                       {/* Days & Description */}
                       <div className="flex flex-col gap-1">
                         <p className="font-bold text-2xl">{duration.days} Days</p>
-                        <p className="text-gray-600">{duration.description}</p>
+                        <p className="text-gray-50">{duration.description}</p>
                       </div>
 
                       {/* Price Section */}
                       <div className="text-right">
-                        <p className="font-bold text-2xl text-rose-400">₹{duration.price} / month</p>
+                        <p className="font-bold text-2xl text-white">₹{duration.price} / month</p>
                       </div>
                     </div>
                   </Card>

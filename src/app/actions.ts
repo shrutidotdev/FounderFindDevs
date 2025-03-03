@@ -1,11 +1,12 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "./utils/requireUser";
-import { companySchema, jobSeekerSchema } from "@/lib/zodSchema";
-import { z } from "zod";
+import { companySchema, jobPostSchema, jobSeekerSchema } from "@/lib/zodSchema";
+import { date, z } from "zod";
 import { toast } from "sonner";
 import { detectBot, request } from "@arcjet/next";
 import arcjet, { shield } from "./arcjet";
+import { redirect } from "next/navigation";
 
 
 const aj = arcjet
@@ -20,7 +21,7 @@ const aj = arcjet
         })
     )
 
-async function createCompany(data: z.infer<typeof companySchema>) {
+export async function createCompany(data: z.infer<typeof companySchema>) {
     const session = await requireUser();
 
     // Arcject the data
@@ -55,7 +56,17 @@ async function createCompany(data: z.infer<typeof companySchema>) {
                 data: {
                     onboardingCompleted: true,
                     userType: "COMPANY",
-                    Company: { create: validateData }
+                    Company: {
+                        create: {
+                            name: validateData.name,
+                            location: validateData.location,
+                            about: validateData.about,
+                            logo: validateData.logo,
+                            website: validateData.website,
+                            xAccount: validateData.xAccount,
+                          
+                        }
+                    }
                 }
             });
         }
@@ -72,7 +83,7 @@ async function createCompany(data: z.infer<typeof companySchema>) {
     }
 }
 
-async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
+export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
 
 
     // Arcject the data
@@ -108,7 +119,13 @@ async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
                     onboardingCompleted: true,
                     userType: "JOB_SEEKER",
                     JobSeeker: {
-                        create: validateData
+                        create: {
+                          name: validateData.name,
+                          resume: validateData.resume,
+                          about: validateData.about,
+                          LinkedIn: validateData.LinkedIn,
+                          portfolioLink: validateData.portfolioLink
+                        }
                     }
                 }
             });
@@ -134,4 +151,36 @@ async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
     }
 }
 
-export { createCompany, createJobSeeker }; 
+export async function createJob(data: z.infer<typeof jobPostSchema>) {
+    const user = await requireUser();
+    
+    // Validate data
+    const validateData = jobPostSchema.parse(data);
+    
+    // Get company
+    const company = await prisma.company.findUnique({
+      where: { userId: user.id },
+      select: { id: true }
+    });
+  
+    if (!company?.id) {
+      throw new Error("Company not found");
+    }
+  
+    // Create job
+    await prisma.jobPost.create({
+      data: {
+        jobDescription: validateData.jobDescription,
+        jobTitle: validateData.jobTitle,
+        employmentType: validateData.employmentType,
+        listingDuration: validateData.listingDuration,
+        salaryFrom: validateData.salaryFrom,
+        salaryTo: validateData.salaryTo,
+        location: validateData.location,
+        benefits: validateData.benefits,
+        companyId: company.id,
+      }
+    });
+  
+    redirect("/");
+  }

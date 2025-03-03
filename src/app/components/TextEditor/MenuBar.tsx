@@ -42,7 +42,7 @@ const MenuBar = ({ editor }: EditorProps) => {
   }
 
   return (
-    <div className="flex flex-wrap my-4 gap-2 sm:gap-3">
+    <div className="p-2 flex flex-wrap my-4 gap-2 ">
       <TooltipProvider>
         {/* BOLD */}
         <Tooltip>
@@ -347,7 +347,7 @@ const MenuBar = ({ editor }: EditorProps) => {
           </Tooltip>
         </div>
 
-        <div className="flex flex-wrap gap-2 sm:gap-3 border-l-2 pl-2 sm:pl-3 ml-2 sm:ml-3 border-gray-200">
+        <div className="flex flex-wrap gap-2 border-l-2 pl-2 sm:pl-3 ml-2 sm:ml-3 border-gray-200">
           {/* undo */}
           <Tooltip>
             <TooltipTrigger asChild>
