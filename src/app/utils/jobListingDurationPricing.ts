@@ -6,17 +6,17 @@ interface JobListingDurationPricing {
 export const jobListingDurationPricing: JobListingDurationPricing[] = [
     {
       days: 30,
-      price: 60000,
+      price: 6000,
       description: "Standard listing",
     },
     {
       days: 60,
-      price: 179,
+      price: 7000,
       description: "Extended visibility",
     },
     {
       days: 90,
-      price: 249,
+      price: 8000,
       description: "Maximum exposure",
     },
   ];

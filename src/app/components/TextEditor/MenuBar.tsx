@@ -37,7 +37,6 @@ interface EditorProps {
 
 const MenuBar = ({ editor }: EditorProps) => {
   if (!editor) {
-    toast.error("Editor cannot be loaded. Sorry for the inconvenience.");
     return null;
   }
 

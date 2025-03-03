@@ -7,6 +7,9 @@ import { toast } from "sonner";
 import { detectBot, request } from "@arcjet/next";
 import arcjet, { shield } from "./arcjet";
 import { redirect } from "next/navigation";
+import { emDash } from "@tiptap/extension-typography";
+import { stripe } from "@/lib/stripe";
+import { jobListingDurationPricing } from "./utils/jobListingDurationPricing";
 
 
 const aj = arcjet
@@ -64,7 +67,7 @@ export async function createCompany(data: z.infer<typeof companySchema>) {
                             logo: validateData.logo,
                             website: validateData.website,
                             xAccount: validateData.xAccount,
-                          
+
                         }
                     }
                 }
@@ -120,11 +123,11 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
                     userType: "JOB_SEEKER",
                     JobSeeker: {
                         create: {
-                          name: validateData.name,
-                          resume: validateData.resume,
-                          about: validateData.about,
-                          LinkedIn: validateData.LinkedIn,
-                          portfolioLink: validateData.portfolioLink
+                            name: validateData.name,
+                            resume: validateData.resume,
+                            about: validateData.about,
+                            LinkedIn: validateData.LinkedIn,
+                            portfolioLink: validateData.portfolioLink
                         }
                     }
                 }
@@ -152,35 +155,107 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
 }
 
 export async function createJob(data: z.infer<typeof jobPostSchema>) {
+    // Only authenticated users
     const user = await requireUser();
-    
+
+    // Arcject the data - If attack happens user will not be allowed 
+    // const req = await request();
+    // const decision = await aj.protect(req);
+    // if(decision.isDenied()) {
+    //     throw new Error("Forbidden, BOTs not allowed to access this resource");
+    // }
+
     // Validate data
     const validateData = jobPostSchema.parse(data);
-    
+
     // Get company
     const company = await prisma.company.findUnique({
-      where: { userId: user.id },
-      select: { id: true }
-    });
-  
-    if (!company?.id) {
-      throw new Error("Company not found");
+        where: { userId: user.id },
+        select: { 
+            id: true, 
+        user: {
+            select: {
+                stripeCustomerId: true
+            }
+        }
     }
-  
-    // Create job
-    await prisma.jobPost.create({
-      data: {
-        jobDescription: validateData.jobDescription,
-        jobTitle: validateData.jobTitle,
-        employmentType: validateData.employmentType,
-        listingDuration: validateData.listingDuration,
-        salaryFrom: validateData.salaryFrom,
-        salaryTo: validateData.salaryTo,
-        location: validateData.location,
-        benefits: validateData.benefits,
-        companyId: company.id,
-      }
     });
-  
-    redirect("/");
-  }
+
+    if (!company?.id) {
+        throw new Error("Company not found");
+    }
+
+    let stripeCustomerId = company.user.stripeCustomerId;
+
+    // as this could undefined if the company is posting for the first time
+    if(!stripeCustomerId){
+        const customer = await stripe.customers.create({
+            email: user.email,
+            name: user.name
+        });
+
+        stripeCustomerId = customer.id;
+        // update user with stripe
+        await prisma.user.update({
+            where: {
+                id: user.id,
+            },
+            data: {
+                stripeCustomerId: customer.id
+            }
+        })
+    }
+
+    // Create job
+    const jobPost = await prisma.jobPost.create({
+        data: {
+            jobDescription: validateData.jobDescription,
+            jobTitle: validateData.jobTitle,
+            employmentType: validateData.employmentType,
+            listingDuration: validateData.listingDuration,
+            salaryFrom: validateData.salaryFrom,
+            salaryTo: validateData.salaryTo,
+            location: validateData.location,
+            benefits: validateData.benefits,
+            companyId: company.id,
+        },
+        select: {
+            id: true,
+        }
+    });
+
+    const pricingTier = jobListingDurationPricing.find((tier) => tier.days === validateData.listingDuration);
+
+    if(!pricingTier){
+        throw new Error("Invalid listing duration");
+    }
+
+    const session = await stripe.checkout.sessions.create({
+        customer: stripeCustomerId,
+        line_items: [
+            {
+                price_data: {
+                    product_data: {
+                        name: `Job Posting ${pricingTier.days}`,
+                        description: pricingTier.description,
+                        images: ["https://o6bmt406v9.ufs.sh/f/Nx5rWf6M1fEpUGC6nL07ip90ugRyHLqWmSbFtxslDVfzvZwe"]
+                    },
+                    currency: "INR",
+                    unit_amount: pricingTier.price * 100,
+                },
+                quantity: 1,
+            }
+        ],
+
+        // tO GET THE jOB pOST ID
+        metadata: {
+            jobId: jobPost.id
+        },
+
+        mode: 'payment',
+        success_url: `${process.env.NEXT_PUBLIC_URL}/payment/success`,
+        cancel_url: `${process.env.NEXT_PUBLIC_URL}/payment/cancel`,
+    })
+
+    redirect(session.url);
+}

@@ -95,7 +95,7 @@ const CreateJobPostForm = ({
       await createJob(values);
 
       console.log(createJob(values))
-      toast.success("Job posted successfully! Your listing is now live.");
+      toast.message("Job posted will be live. After payment is successful");
     } catch (error) {
       if (error instanceof Error && error.message !== "NEXT_REDIRECT") {
         console.log("Something went wrong: ", error.message);
