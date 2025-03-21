@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 import { emDash } from "@tiptap/extension-typography";
 import { stripe } from "@/lib/stripe";
 import { jobListingDurationPricing } from "./utils/jobListingDurationPricing";
+import { inngest } from "@/lib/inngest/client";
 
 
 const aj = arcjet
@@ -229,6 +230,15 @@ export async function createJob(data: z.infer<typeof jobPostSchema>) {
     if(!pricingTier){
         throw new Error("Invalid listing duration");
     }
+
+    // Triggeing JobListingdurationExpiration from inngest
+    await inngest.send({
+        name: "job/listingExpired",
+        data: {
+            jobId: jobPost.id,
+            expirationDays: validateData.listingDuration,
+        }
+    })
 
     const session = await stripe.checkout.sessions.create({
         customer: stripeCustomerId,
